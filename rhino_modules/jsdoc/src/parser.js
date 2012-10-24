@@ -70,9 +70,15 @@ exports.Parser.prototype.parse = function(sourceFiles, encoding) {
             }
         }
 
-        currentParser = this;
-        this._parseSourceCode(sourceCode, filename);
-        currentParser = null;
+        try {
+            currentParser = this;
+            this._parseSourceCode(sourceCode, filename);
+        } catch(e) {
+            console.log('FILE READ ERROR: in module:jsdoc/parser.parseFiles: "' + filename + '" ' + e);
+            continue;
+        } finally {
+            currentParser = null;
+        }
     }
 
     return this._resultBuffer;

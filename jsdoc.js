@@ -377,6 +377,7 @@ function main() {
         require('jsdoc/borrow').resolveBorrows(docs);
 
         if (env.opts.explain) {
+            console.log(sourceFiles);
             console.log(docs);
             process.exit(0);
         }
@@ -404,6 +405,7 @@ function main() {
         if (template.publish && typeof template.publish === 'function') {
             // convert this from a URI back to a path if necessary
             env.opts.template = uriToPath(env.opts.template);
+            console.log(docs);
             template.publish(
                 taffy(docs),
                 env.opts,

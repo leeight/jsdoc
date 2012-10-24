@@ -1,0 +1,17 @@
+<?js
+    var params = obj;
+    var self = this;
+?>
+<table class="horiz-rule">
+    <tbody>
+        <?js params.forEach(function(param, i){?>
+            <tr class="<?js if(i % 2 == 0){?>even<?js}else{?>odd<?js}?>">
+                <td>
+                    <span class="entryName"><?js= param.name ?></span>&nbsp;:&nbsp;
+                    <div class="fullType">(<?js= self.partial('type.tmpl', param.type) ?>)</div>
+                    <div class="entryOverview"><?js= self.htmlsafe(param.description) ?></div>
+                </td>
+            </tr>
+        <?js }); ?>
+    </tbody>
+</table>

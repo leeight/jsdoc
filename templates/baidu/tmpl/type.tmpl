@@ -1,0 +1,12 @@
+<?js
+var type = obj;
+var self = this;
+if(type && type.names) {
+    var length = type.names.length;
+    type.names.forEach(function(t, j){
+?>
+
+<span class="type"><a href="#"><?js= self.linkto(t, self.htmlsafe(t)) ?></a></span>
+<?js if(j + 1 < length){ ?><span>&nbsp;|&nbsp;</span><?js } ?>
+
+<?js }); } ?>
