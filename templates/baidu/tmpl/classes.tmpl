@@ -60,9 +60,27 @@
 <?js } ?>
 
 <?js
-    var methods = self.find({kind: 'function', memberof: title === 'Globals'? {isUndefined: true} : doc.longname});
-    if (methods && methods.length && methods.forEach) { 
+function getInheritsChain(className) {
+    var chains = [];
+    chains.push(className);
+    while(true) {
+        var rv = self.find({
+            'kind' : 'class',
+            'longname' : className
+        });
+        if (rv && rv.length && rv[0].augments && rv[0].augments.length) {
+            className = rv[0].augments[0];
+            chains.push(className);
+        } else {
+            break;
+        }
+    }
+
+    return chains;
+}
+var chains = getInheritsChain(doc.longname);
 ?>
+
 <h2>Instance Methods</h2>
 <div class="legend">
     <span class="key publickey"></span><span>Public</span>
@@ -71,11 +89,19 @@
 </div>
 
 <!-- LOOP BEGIN -->
+<?js
+chains.forEach(function(className){
+var methods = self.find({
+    kind: 'function',
+    memberof: title === 'Globals' ? {isUndefined: true} : className
+});
+if (methods && methods.length && methods.forEach) { 
+?>
 <div>
     <div class="desc">
         Defined in
         <span class="fn-name">
-            <?js= self.linkto(doc.longname, doc.longname) ?>
+            <?js= self.linkto(className, className) ?>
         </span>
     </div>
     <div class="section">
@@ -129,9 +155,8 @@
         </table>
     </div>
 </div>
-<!-- LOOP END -->
-
 <?js } ?>
+<?js }); ?>
 
 <section>
     

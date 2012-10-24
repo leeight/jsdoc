@@ -40,7 +40,11 @@ exports.validate = function(tag, meta) {
     
     if (!tag.text) {
         if (tagDef.mustHaveValue) {
-            require('jsdoc/util/error').handle( new TagValueRequiredError(tag.title, meta) );
+            if (tag.title === 'description') {
+                tag.text = 'No description.';
+            } else {
+                require('jsdoc/util/error').handle( new TagValueRequiredError(tag.title, meta) );
+            }
         }
     }
     else {

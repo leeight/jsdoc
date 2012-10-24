@@ -77,6 +77,27 @@ function generate(title, docs, filename, opt_viewname) {
 }
 
 /**
+ * @param {string} className the child class name.
+ */
+exports.getInheritsChain = function(className) {
+    var chains = [];
+    chains.unshift(className);
+    while(true) {
+        var rv = helper.find(data, {
+            'kind' : 'class',
+            'longname' : className
+        });
+        if (rv && rv.length && rv[0].augments && rv[0].augments.length) {
+            className = rv[0].augments[0];
+        } else {
+            break;
+        }
+    }
+
+    return chains;
+}
+
+/**
  * Create the navigation sidebar.
  * @param {object} members The members that will be used to create the sidebar.
  * @param {array<object>} members.classes
