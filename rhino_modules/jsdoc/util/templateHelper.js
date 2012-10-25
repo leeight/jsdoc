@@ -46,7 +46,7 @@ var nsprefix = /^(event|module|external):/;
 
 function strToFilename(str) {
     // allow for namespace prefix
-    var basename = str.replace(nsprefix, '$1-');
+    var basename = String(str).replace(nsprefix, '$1-');
     
     if ( /[^$a-z0-9._\-]/i.test(basename) ) {
         return md5(str).substr(0, 10);
@@ -68,7 +68,7 @@ var linkto = exports.linkto = function(longname, linktext) {
 };
 
 var htmlsafe = exports.htmlsafe = function(str) {
-    return str.replace(/</g, '&lt;');
+    return String(str).replace(/</g, '&lt;');
 };
 
 /**
@@ -357,7 +357,7 @@ var toTutorial = exports.toTutorial = function(tutorial, content, missingOpts) {
 
 /** Find symbol {@link ...} and {@tutorial ...} strings in text and turn into html links */
 exports.resolveLinks = function(str) {
-    str = str.replace(/(?:\[(.+?)\])?\{@link +(.+?)\}/gi,
+    str = String(str).replace(/(?:\[(.+?)\])?\{@link +(.+?)\}/gi,
         function(match, content, longname) {
             return toLink(longname, content);
         }

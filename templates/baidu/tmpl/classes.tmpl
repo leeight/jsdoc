@@ -91,7 +91,10 @@ var chains = getInheritsChain(doc.longname);
 <!-- LOOP BEGIN -->
 <?js
 chains.forEach(function(className){
+
+// http://www.taffydb.com/writingqueries
 var methods = self.find({
+    inherited: {isUndefined: true},
     kind: 'function',
     memberof: title === 'Globals' ? {isUndefined: true} : className
 });
