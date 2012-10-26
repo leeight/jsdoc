@@ -30,19 +30,20 @@ var getInheritsChain = exports.getInheritsChain = function(className, docs) {
         return _cache[className];
     }
 
+    var cn = className;
     var chains = [];
-    chains.push(className);
+    chains.push(cn);
     while(true) {
         var rv = null;
         for(var i = 0, j = docs.length; i < j; i ++) {
-            if (docs[i].kind === 'class' && docs[i].longname === className) {
+            if (docs[i].kind === 'class' && docs[i].longname === cn) {
                 rv = docs[i];
                 break;
             }
         }
         if (rv && rv.augments && rv.augments.length) {
-            className = rv.augments[0];
-            chains.push(className);
+            cn = rv.augments[0];
+            chains.push(cn);
         } else {
             break;
         }

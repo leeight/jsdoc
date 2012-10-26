@@ -29,16 +29,18 @@ function getInheritsChain(className) {
         return _cache[className];
     }
 
+    var cn = className;
+    
     var chains = [];
-    chains.push(className);
+    chains.push(cn);
     while(true) {
         var rv = find({
             'kind' : 'class',
-            'longname' : className
+            'longname' : cn
         });
         if (rv && rv.length && rv[0].augments && rv[0].augments.length) {
-            className = rv[0].augments[0];
-            chains.push(className);
+            cn = rv[0].augments[0];
+            chains.push(cn);
         } else {
             break;
         }
