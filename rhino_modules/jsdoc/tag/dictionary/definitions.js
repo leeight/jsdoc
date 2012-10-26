@@ -102,6 +102,7 @@ exports.defineTags = function(dictionary) {
             doclet.inheritDoc = true;
         }
     })
+    .synonym("inheritsdoc")
     .synonym("override");
     
     dictionary.defineTag('abstract', {

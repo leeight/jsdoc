@@ -1,68 +1,4 @@
-<?js
 
-var self = this;
-docs.forEach(function(doc, i) {
-?>
-
-<?js if (doc.kind === 'mainpage' || (doc.kind === 'package')) { ?>
-    <?js= self.partial('mainpage.tmpl', doc) ?>
-<?js } else { ?>
-
-<div id="title">
-    <span class="fn"><?js= doc.longname ?></span>
-    <?js if (doc.augments && doc.augments.length) { ?>
-        <span>Extends</span>
-        <span class="fn-name">
-            <?js doc.augments.forEach(function(a) { ?>
-            <?js= self.linkto(a, a) ?>
-            <?js }); ?>
-        </span>
-    <?js } ?>
-</div>
-
-<div class="g-section g-tpl-75-25">
-    <div class="g-unit g-first" id="description">
-    <?js if (doc.classdesc) { ?>
-        <?js= doc.classdesc ?>
-    <?js } ?>
-    <?js if (doc.description) { ?>
-        <?js= doc.description ?>
-    <?js } ?>
-    </div>
-
-
-    <div class="g-unit" id="useful-links">
-        <div class="title">Useful links</div>
-        <ol>
-            <!--
-            <li><a href="../trunk/closure/goog/demos/button.html">Demo</a></li>
-            -->
-            <?js if (doc.meta) {?>
-            <li><a href="<?js= doc.meta.filename ?>"><span class="source-code-link">Source Code</span></a></li>
-            <?js } ?>
-            <!--
-            <li><a href="http://code.google.com/p/closure-library/source/browse/trunk/closure/goog/ui/button.js">SVN</a></li>
-            -->
-        </ol>
-    </div>
-</div>
-
-<h2>Constructor</h2>
-<div class="fn-constructor">
-    <?js= doc.longname ?>(
-    <?js if(doc.params){ doc.params.forEach(function(param, i){ ?>
-        <?js= param.name ?><?js if(i + 1 < doc.params.length) { ?>,&nbsp;<?js } ?>
-    <?js }); } ?>)
-</div>
-
-<?js if(doc.params){ ?>
-<h3>Parameters</h3>
-<?js= self.partial('params.tmpl', doc.params) ?>
-<?js } ?>
-
-<?js
-var chains = self.getInheritsChain(doc.longname);
-?>
 
 <h2>Instance Methods</h2>
 <div class="legend">
@@ -178,7 +114,7 @@ chains.forEach(function(className){
                     <td class="access"></td>
                     <td>
                         <div class="arg">
-                            <img align="left" src="styles/images/blank.gif">
+                            <img align="left" src="static/images/blank.gif">
                             <span class="entryName"><?js= m.name ?></span>
                             : <div class="fullType">(<?js= self.partial('type.tmpl', m.type) ?>)</div>
                         </div>
@@ -200,5 +136,97 @@ chains.forEach(function(className){
 </div>
 <?js }); ?>
 
-<?js } ?>
-<?js }); ?>
+
+==================================================
+
+
+
+<section>
+    
+
+<article>
+    <div class="container-overview">
+    <?js if (doc.kind === 'module' && doc.module) { ?>
+        <?js= self.partial('method.tmpl', doc.module) ?>
+    <?js } ?>
+    
+    <?js if (doc.kind === 'class') { ?>
+        
+    <?js } else { ?>
+        <?js if (doc.description) { ?>
+            <div class="description"><?js= doc.description ?></div>
+        <?js } ?>
+        
+        <?js= self.partial('details.tmpl', doc) ?>
+        
+        <?js if (doc.examples && doc.examples.length) { ?>
+            <h3>Example<?js= doc.examples.length > 1? 's':'' ?></h3>
+            <?js= self.partial('examples.tmpl', doc.examples) ?>
+        <?js } ?>
+    <?js } ?>
+    </div>
+    
+    <?js if (doc.mixes && doc.mixes.length) { ?>
+        <h3 class="subsection-title">Mixes In</h3>
+        
+        <ul><?js doc.mixes.forEach(function(a) { ?>
+            <li><?js= self.linkto(a, a) ?></li>
+        <?js }); ?></ul>
+    <?js } ?>
+    
+    <?js if (doc.requires && doc.requires.length) { ?>
+        <h3 class="subsection-title">Requires</h3>
+        
+        <ul><?js doc.requires.forEach(function(r) { ?>
+            <li><?js= self.linkto(r, r) ?></li>
+        <?js }); ?></ul>
+    <?js } ?>
+    
+    <?js
+        var classes = self.find({kind: 'class', memberof: doc.longname}); 
+        if (doc.kind !== 'globalobj' && classes && classes.length) { 
+    ?>
+        <h3 class="subsection-title">Classes</h3>
+        
+        <dl><?js classes.forEach(function(c) { ?>
+            <dt><?js= self.linkto(c.longname, c.name) ?></dt>
+            <dd><?js if (c.summary) { ?><?js= c.summary ?><?js } ?></dd>
+        <?js }); ?></dl>
+    <?js } ?>
+    
+    <?js
+        var namespaces = self.find({kind: 'namespace', memberof: doc.longname}); 
+        if (doc.kind !== 'globalobj' && namespaces && namespaces.length) { 
+    ?>
+        <h3 class="subsection-title">Namespaces</h3>
+        
+        <dl><?js namespaces.forEach(function(n) { ?>
+            <dt><a href="namespaces.html#<?js= n.longname ?>"><?js= self.linkto(n.longname, n.name) ?></a></dt>
+            <dd><?js if (n.summary) { ?><?js= n.summary ?><?js } ?></dd>
+        <?js }); ?></dl>
+    <?js } ?>
+    
+    <?js
+        var typedefs = self.find({kind: 'typedef', memberof: doc.longname}); 
+        if (typedefs && typedefs.length && typedefs.forEach) { 
+    ?>
+        <h3 class="subsection-title">TypeDefs</h3>
+        
+        <dl><?js typedefs.forEach(function(e) { ?>
+            <?js= self.partial('ms.tmpl', e) ?>
+        <?js }); ?></dl>
+    <?js } ?>
+    
+    <?js
+        var events = self.find({kind: 'event', memberof: doc.longname}); 
+        if (events && events.length && events.forEach) { 
+    ?>
+        <h3 class="subsection-title">Events</h3>
+        
+        <dl><?js events.forEach(function(e) { ?>
+            <?js= self.partial('method.tmpl', e) ?>
+        <?js }); ?></dl>
+    <?js } ?>
+</article>
+
+</section>  

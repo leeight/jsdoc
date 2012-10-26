@@ -375,6 +375,7 @@ function main() {
 
         require('jsdoc/augment').addInherited(docs);
         require('jsdoc/borrow').resolveBorrows(docs);
+        require('jsdoc/inherit_doc').resolveInheritDoc(docs);
 
         if (env.opts.explain) {
             console.log(sourceFiles);
@@ -405,7 +406,6 @@ function main() {
         if (template.publish && typeof template.publish === 'function') {
             // convert this from a URI back to a path if necessary
             env.opts.template = uriToPath(env.opts.template);
-            console.log(docs);
             template.publish(
                 taffy(docs),
                 env.opts,

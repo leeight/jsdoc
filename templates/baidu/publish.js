@@ -23,6 +23,30 @@ function getAncestorLinks(doclet) {
     return helper.getAncestorLinks(data, doclet);
 }
 
+var _cache = {};
+function getInheritsChain(className) {
+    if (_cache[className]) {
+        return _cache[className];
+    }
+
+    var chains = [];
+    chains.push(className);
+    while(true) {
+        var rv = find({
+            'kind' : 'class',
+            'longname' : className
+        });
+        if (rv && rv.length && rv[0].augments && rv[0].augments.length) {
+            className = rv[0].augments[0];
+            chains.push(className);
+        } else {
+            break;
+        }
+    }
+
+    return (_cache[className] = chains);
+}
+
 var linkto = helper.linkto;
 
 var htmlsafe = helper.htmlsafe;
@@ -225,7 +249,7 @@ exports.publish = function(taffyData, opts, tutorials) {
     // set up tutorials for helper
     helper.setTutorials(tutorials);
 
-    data = helper.prune(data);
+    // data = helper.prune(data);
     data.sort('longname, version, since');
 
     data().each(function(doclet) {
@@ -318,6 +342,7 @@ exports.publish = function(taffyData, opts, tutorials) {
     view.linkto = linkto;
     view.tutoriallink = tutoriallink;
     view.htmlsafe = htmlsafe;
+    view.getInheritsChain = getInheritsChain;
 
     // once for all
     view.nav = buildNav(members);
