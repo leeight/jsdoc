@@ -33,12 +33,10 @@ if (match instanceof Array) {
 opts.matcher = new RegExp("(" + match + ")\\.(" + extensions + ")$", 'i');
 
 var helperCollection = require('test/spec-collection');
-var specFolders = ['test/specs', 'plugins/test/specs'];
+var specFolders = ['test/specs'];
 
 var failedCount = 0;
 var index = 0;
-
-var onComplete;
 
 function runNextFolder() {
     if (index < specFolders.length) {
@@ -49,7 +47,7 @@ function runNextFolder() {
     }
 }
 
-onComplete = function(runner, log) {
+function onComplete(runner, log) {
     if (runner.results().failedCount !== 0) {
         failedCount += runner.results().failedCount;
     }

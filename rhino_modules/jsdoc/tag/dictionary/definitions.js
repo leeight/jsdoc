@@ -96,12 +96,14 @@ function firstWordOf(string) {
     @param {module:jsdoc/tag/dictionary} dictionary
 */
 exports.defineTags = function(dictionary) {
-    dictionary.defineTag('inheritDoc', {
+    dictionary.defineTag('inheritdoc', {
         mustNotHaveValue: true,
         onTagged: function(doclet, tag) {
-            console.log(tag);
+            doclet.inheritDoc = true;
         }
-    });
+    })
+    .synonym("override");
+    
     dictionary.defineTag('abstract', {
         mustNotHaveValue: true,
         onTagged: function(doclet, tag) {

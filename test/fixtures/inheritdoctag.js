@@ -1,0 +1,5 @@
+/**
+ * @inheritDoc
+ */
+function foo() {
+}
